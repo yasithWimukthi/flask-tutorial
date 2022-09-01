@@ -1,31 +1,25 @@
-from flask import Flask, jsonify, request
+from flask import Flask
+from flask_restful import Api, Resource
 
 app = Flask(__name__)
+api = Api(app)
+
+items = []
 
 
-@app.route('/store', methods=['POST'])
-def create_store():
-    pass
+class Item(Resource):
+    def get(self, name):
+        for item in items:
+            if item['name'] == name:
+                return item
+        return {'item': None}, 404
+
+    def post(self, name):
+        item = {'name': name, 'price': 12.00}
+        items.append(item)
+        return item, 201
 
 
-@app.route('/store/<string:name>')
-def get_store(name):
-    pass
-
-
-@app.route('/store')
-def get_stores():
-    pass
-
-
-@app.route('/store/<string:name>/item', methods=['POST'])
-def create_item_in_store(name):
-    pass
-
-
-@app.route('/store/<string:name>/item')
-def get_item_in_store(name):
-    pass
-
+api.add_resource(Item, '/item/<string:name>')
 
 app.run(port=5000)

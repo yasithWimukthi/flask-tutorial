@@ -1,4 +1,5 @@
 import sqlite3
+from flask_restful import Resource
 
 
 class User:
@@ -41,3 +42,8 @@ class User:
 
         connection.close()
         return user
+
+
+class UserRegister(Resource):
+    def post(self):
+        pass

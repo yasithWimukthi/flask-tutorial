@@ -51,6 +51,7 @@ class UserRegister(Resource):
     parser.add_argument('password', type=str, required=True, help='This field cannot be left blank')
 
     def post(self):
+        data = UserRegister.parser.parse_args()
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 

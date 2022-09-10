@@ -10,8 +10,17 @@ class Item(Resource):
         # for item in items:
         #     if item['name'] == name:
         #         return item
-        item = next(filter(lambda x: x['name'] == name, items), None)
-        return {'item': item}, 200 if item else 404
+        # item = next(filter(lambda x: x['name'] == name, items), None)
+        # return {'item': item}, 200 if item else 404
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        query = "SELECT * FROM items WHERE name=?"
+        result = cursor.execute(query, (name,))
+        row = result.fetchone()
+        connection.close()
+        if row:
+            return {'item': {'name': row[0], 'price': row[1]}}
+        return {'message': 'Item not found'}, 404
 
     def post(self, name):
         if next(filter(lambda x: x['name'] == name, items), None):

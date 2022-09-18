@@ -22,6 +22,17 @@ class Item(Resource):
             return {'item': {'name': row[0], 'price': row[1]}}
         return {'message': 'Item not found'}, 404
 
+    @classmethod
+    def find_by_name(cls, name):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        query = "SELECT * FROM items WHERE name=?"
+        result = cursor.execute(query, (name,))
+        row = result.fetchone()
+        connection.close()
+        if row:
+            return {'item': {'name': row[0], 'price': row[1]}}
+
     def post(self, name):
         if next(filter(lambda x: x['name'] == name, items), None):
             return {'message': "An item with name '{}' already exists.".format(name)}, 400

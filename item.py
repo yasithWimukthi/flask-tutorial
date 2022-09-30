@@ -28,7 +28,7 @@ class Item(Resource):
             return {'message': "An item with name '{}' already exists.".format(name)}, 400
         data = Item.parser.parse_args()
         item = {'name': name, 'price': data['price']}
-
+        self.insert(item)
         return item, 201
 
     @classmethod

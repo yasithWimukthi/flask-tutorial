@@ -69,6 +69,15 @@ class Item(Resource):
                 return {'message': 'An error occurred updating the item'}, 500
         return updated_item
 
+    @classmethod
+    def update(cls, item):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        query = "UPDATE items SET price=? WHERE name=?"
+        cursor.execute(query, (item['price'], item['name']))
+        connection.commit()
+        connection.close()
+
 
 class ItemList(Resource):
     def get(self):
